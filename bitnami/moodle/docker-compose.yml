@@ -20,9 +20,6 @@ services:
       dockerfile: Dockerfile
       args:
         - EXTRA_LOCALES=de_DE.UTF-8 UTF-8
-    ports:
-      - '8080:8080'
-      - '8443:8443'
     environment:
       - MOODLE_DATABASE_HOST=mariadb
       - MOODLE_DATABASE_PORT_NUMBER=3306
@@ -35,3 +32,9 @@ services:
       - /home/jbuechel/moodle_persistence/bitnami/moodledata:/bitnami/moodledata
     depends_on:
       - mariadb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.moodle.rule=Host(`moodle.audijo.de`)"
+      - "traefik.http.routers.moodle.entrypoints=websecure"
+      - "traefik.http.routers.moodle.tls=true"
+      - "traefik.http.routers.moodle.tls.certresolver=myresolver"
